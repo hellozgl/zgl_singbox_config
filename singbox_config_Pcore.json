@@ -69,7 +69,7 @@
     { "tag": "🇸🇬 狮城自动", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "use_all_providers": true, "includes": [ "🇸🇬|新加坡|SG|SINGAPORE|Singapore" ] },
     { "tag": "🇺🇸 美国自动", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "use_all_providers": true, "includes": [ "🇺🇸|美国|US|UNITED STATES|United States" ] },
     { "tag": "懒人节点", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "use_all_providers": true, "includes": [ "懒人" ] },
-    { "tag": "其他节点", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "use_all_providers": true, "includes": [ "^[^(港|日|美|印|新|台|懒|ABC)]*$" ] },
+    { "tag": "其他节点", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "providers": "🛫 wmsxwd" , "includes": [ "^[^(港|日|美|印|新|台|懒|ABC)]*$" ] },
     { "tag": "🐷 自建节点", "type": "urltest", "url": "http://www.gstatic.com/generate_204", "tolerance": 50, "providers": "🛫 zglproviders" }
   ],
   "outbound_providers": [
