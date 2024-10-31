@@ -76,7 +76,7 @@
     {
       "tag": "🛫 wmsxwd",
       "type": "remote",
-      "download_url": "https://wm01dy.wmyun.men/api/v1/client/subscribe?token=bc33a46ee86d94ababb938a7d6f34ce0",
+      "download_url": "https://wm01dy.wmyun.men/api/v1/client/subscribe?token=xxxxx",
       "path": "./wmsxwd.yaml",
       "download_interval": "24h",
       "download_ua": "clash.meta",
