@@ -15,18 +15,17 @@
     "servers": [
       { "tag": "dns_local", "address": [ "223.5.5.5", "119.29.29.29" ], "detour": "DIRECT" },
       { "tag": "dns_proxy", "address": [ "tls://8.8.4.4", "tls://8.8.8.8", "tls://208.67.222.2" ], "client_subnet": "114.114.114.114", "detour": "DIRECT" },
-      // { "tag": "dns_fakeip", "address": "fakeip" },
       { "tag": "dns_block", "address": "rcode://success" }
     ],
     "rules": [
       { "outbound": "any", "server": "dns_local", "disable_cache": true },
-      { "domain_suffix": [ "ghproxy.com", "jsdelivr.net", "guangbomi.com", "oaifree.com" ], "server": "dns_local" },
-      { "clash_mode": "Direct", "query_type": [ "A", "AAAA" ], "server": "dns_local" },
-      { "clash_mode": "Global", "query_type": [ "A", "AAAA" ], "server": "dns_proxy" },
+      { "domain_suffix": [ "ghproxy.com", "jsdelivr.net", "guangbomi.com", "oaifree.com", "siicfl.com" ], "server": "dns_local" },
+      { "clash_mode": "Direct", "server": "dns_local" },
+      { "clash_mode": "Global", "server": "dns_proxy" },
       { "rule_set": [ "ads" ], "server": "dns_block", "disable_cache": true, "rewrite_ttl": 0 },
-      { "rule_set": [ "proxy" ], "query_type": [ "A", "AAAA" ],"rewrite_ttl": 1, "server": "dns_fakeip"},
-      { "rule_set": [ "cn" ], "query_type": [ "A", "AAAA" ], "server": "dns_local" },
-      { "fallback_rules": [ { "rule_set": [ "cnip" ], "server": "dns_local" }, { "match_all": true, "server": "dns_fakeip", "rewrite_ttl": 1 } ], "server": "dns_proxy" }
+      { "rule_set": [ "proxy" ],"rewrite_ttl": 1, "server": "dns_proxy"},
+      { "rule_set": [ "cn" ], "server": "dns_local" },
+      { "fallback_rules": [ { "rule_set": [ "cnip" ], "server": "dns_local" }, { "match_all": true, "server": "dns_proxy", "rewrite_ttl": 1 } ], "server": "dns_proxy" }
     ],
     "final": "dns_local",
     "strategy": "prefer_ipv4",
@@ -34,17 +33,16 @@
     "lazy_cache": true,
     "reverse_mapping": true,
     "mapping_override": true
-    // "fakeip": { "enabled": true, "inet4_range": "198.18.0.0/15", "inet6_range": "fc00::/18", "exclude_rule": { "rule_set": [ "fakeip-filter", "private" ] } }
   },
   "inbounds": [
     { "type": "tun", "tag": "tun-in", "inet4_address": "172.19.0.1/30" , "inet4_route_address": ["0.0.0.0/1", "128.0.0.0/1" ], "inet4_route_exclude_address": ["192.168.0.0/16" ], "mtu": 9000, "auto_route": true, "strict_route": false, "sniff": true, "sniff_override_destination": false, "endpoint_independent_nat": false, "stack": "system", "platform": { "http_proxy": { "enabled": true, "server": "127.0.0.1", "server_port": 2080 } } }
-    // { "type": "mixed", "tag": "mixed", "listen": "127.0.0.1", "listen_port": 2080, "sniff": true, "users": [] }
   ],
   "outbounds": [
     { "tag": "🔰 节点选择", "type": "selector", "outbounds": [ "♻️ 自动选择", "🇭🇰 香港自动", "🇨🇳 台湾自动", "🇯🇵 日本自动", "🇮🇳 印度自动", "🇸🇬 狮城自动", "🇺🇸 美国自动", "懒人节点", "其他节点", "🌀 手动切换", "🎯 全球直连", "🐷 自建节点" ] },
 	  { "tag": "🌀 手动切换", "type": "selector", "use_all_providers": true, "includes": [ "🇭🇰|香港|HK|HONGKONG|HongKong|🇨🇳|台湾|TW|TAIWAN|Taiwan|🇯🇵|日本|JP|JAPAN|Japan|🇸🇬|新加坡|SG|SINGAPORE|Singapore|🇺🇸|美国|US|UNITED STATES|United States" ] },
     { "tag": "♻️ 自动选择", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "outbounds": [ "🇭🇰 香港自动", "🇨🇳 台湾自动", "🇯🇵 日本自动", "🇮🇳 印度自动", "🇸🇬 狮城自动", "🇺🇸 美国自动", "懒人节点", "其他节点" ] },
     { "tag": "🤖 人工智能", "type": "selector", "outbounds": [ "🇭🇰 香港自动", "🇨🇳 台湾自动", "🇯🇵 日本自动", "🇮🇳 印度自动", "🇸🇬 狮城自动", "🇺🇸 美国自动" ] },
+    { "tag": "📽 EMBY", "type": "selector", "outbounds": [ "🎯 全球直连", "🇭🇰 香港自动", "🇨🇳 台湾自动", "🇯🇵 日本自动", "🇮🇳 印度自动", "🇸🇬 狮城自动", "🇺🇸 美国自动", "懒人节点", "其他节点", "🐷 自建节点" ] },
     { "tag": "🎮 游戏服务", "type": "selector", "outbounds": [ "🎯 全球直连", "🔰 节点选择" ] },
     { "tag": "🪟 微软服务", "type": "selector", "outbounds": [ "🎯 全球直连", "🔰 节点选择" ] },
     { "tag": "🇬 谷歌服务", "type": "selector", "outbounds": [ "🎯 全球直连", "🔰 节点选择" ] },
@@ -82,25 +80,25 @@
       "download_ua": "clash.meta",
       "includes": [],
       "healthcheck_url": "http://www.google-analytics.com/generate_204",
-      "healthcheck_interval": "10m"
+      "healthcheck_interval": "120m"
     },
     {
       "tag": "🛫 zglproviders",
       "type": "remote",
       "download_url": "https://gist.githubusercontent.com/hellozgl/c2d9f03f3588fece70808a6668dba13b/raw/proxy-providers-zgl.yaml",
       "path": "./zglproviders.yaml",
-      "download_interval": "1h",
+      "download_interval": "12h",
       "download_ua": "clash.meta",
       "includes": [],
       "healthcheck_url": "http://www.gstatic.com/generate_204",
-      "healthcheck_interval": "10m"
+      "healthcheck_interval": "60m"
     }
   ],
   "route": {
     "rules": [
       { "protocol": [ "dns" ], "outbound": "dns-out" },
       { "domain_suffix": [ "linux.do", "ajay.app", "returnyoutubedislikeapi.com" ], "outbound": "🪜 代理域名" },
-      { "domain_suffix": [ "oaifree.com", "guangbomi.com", "bootcss.com","clash.razord.top", "yacd.metacubex.one", "yacd.haishan.me", "d.metacubex.one" ], "outbound": "🇨🇳 直连域名" },
+      { "domain_suffix": [ "oaifree.com", "siicfl.com", "guangbomi.com", "bootcss.com","clash.razord.top", "yacd.metacubex.one", "yacd.haishan.me", "d.metacubex.one" ], "outbound": "🇨🇳 直连域名" },
       { "protocol": [ "quic" ], "outbound": "REJECT" },
       { "clash_mode": "Direct", "outbound": "DIRECT" },
       { "clash_mode": "Global", "outbound": "GLOBAL" },
@@ -117,7 +115,12 @@
       { "rule_set": [ "telegramip" ], "outbound": "📲 电报消息", "skip_resolve": true },
       { "rule_set": [ "privateip" ], "outbound": "🔒 私有网络", "skip_resolve": true },
       { "rule_set": [ "cnip" ], "outbound": "🇨🇳 直连 IP" },
-      { "rule_set": [ "geosite-cn" ], "outbound": "DIRECT" }
+      { "rule_set": [ "geosite-cn" ], "outbound": "DIRECT" },
+      { "rule_set": [ "zglemby" ], "outbound": "📽 EMBY" },
+      { "rule_set": [ "zglauto" ], "outbound": "🔰 节点选择" },
+      { "rule_set": [ "zglmanual" ], "outbound": "🌀 手动切换" },
+      { "rule_set": [ "zgldirect" ], "outbound": "🎯 全球直连" },
+      { "rule_set": [ "zglreject" ], "outbound": "REJECT" }
     ],
     "rule_set": [
       {
@@ -225,6 +228,51 @@
         "path": "./geosite-cn.srs",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
         "download_detour": "🔰 节点选择"
+      },
+      {
+        "tag": "zglemby",
+        "type": "remote",
+        "format": "source",
+        "path": "./zglemby.json",
+        "url": "https://gist.githubusercontent.com/hellozgl/5126446637ea7559af8d40b5c9d472ff/raw/zglemby.json",
+        "download_detour": "DIRECT",
+        "update_interval": "12h"
+      },
+      {
+        "tag": "zglauto",
+        "type": "remote",
+        "format": "source",
+        "path": "./zglauto.json",
+        "url": "https://gist.githubusercontent.com/hellozgl/5eebc4d8cfd010511873b92fa7152864/raw/zglauto.json",
+        "download_detour": "DIRECT",
+        "update_interval": "12h"
+      },
+      {
+        "tag": "zglmanual",
+        "type": "remote",
+        "format": "source",
+        "path": "./zglmanual.json",
+        "url": "https://gist.githubusercontent.com/hellozgl/eec170a3685a41692f28ffc9b2e89a6d/raw/zglmanual.json",
+        "download_detour": "DIRECT",
+        "update_interval": "12h"
+      },
+      {
+        "tag": "zgldirect",
+        "type": "remote",
+        "format": "source",
+        "path": "./zgldirect.json",
+        "url": "https://gist.githubusercontent.com/hellozgl/e2897e0222ab9754b0d398d9df6f53c5/raw/zgldirect.json",
+        "download_detour": "DIRECT",
+        "update_interval": "12h"
+      },
+      {
+        "tag": "zglreject",
+        "type": "remote",
+        "format": "source",
+        "path": "./zglreject.json",
+        "url": "https://gist.githubusercontent.com/hellozgl/61b17f3186afa2bf92786c5c07ec70b5/raw/zglreject.json",
+        "download_detour": "DIRECT",
+        "update_interval": "12h"
       }
     ],
     "final": "🐟 漏网之鱼",
