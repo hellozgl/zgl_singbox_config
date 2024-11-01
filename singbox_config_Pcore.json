@@ -13,10 +13,10 @@
   },
   "dns": {
     "servers": [
-      { "tag": "dns_block", "address": "rcode://success" },
       { "tag": "dns_local", "address": [ "223.5.5.5", "119.29.29.29" ], "detour": "DIRECT" },
-      { "tag": "dns_proxy", "address": [ "tls://8.8.4.4", "tls://8.8.8.8", "tls://208.67.222.2" ], "client_subnet": "114.114.114.114", "detour": "🎯 全球直连" },
-      { "tag": "dns_fakeip", "address": "fakeip" }
+      { "tag": "dns_proxy", "address": [ "tls://8.8.4.4", "tls://8.8.8.8", "tls://208.67.222.2" ], "client_subnet": "114.114.114.114", "detour": "DIRECT" },
+      // { "tag": "dns_fakeip", "address": "fakeip" },
+      { "tag": "dns_block", "address": "rcode://success" }
     ],
     "rules": [
       { "outbound": "any", "server": "dns_local", "disable_cache": true },
@@ -33,12 +33,12 @@
     "independent_cache": true,
     "lazy_cache": true,
     "reverse_mapping": true,
-    "mapping_override": true,
-    "fakeip": { "enabled": true, "inet4_range": "198.18.0.0/15", "inet6_range": "fc00::/18", "exclude_rule": { "rule_set": [ "fakeip-filter", "private" ] } }
+    "mapping_override": true
+    // "fakeip": { "enabled": true, "inet4_range": "198.18.0.0/15", "inet6_range": "fc00::/18", "exclude_rule": { "rule_set": [ "fakeip-filter", "private" ] } }
   },
   "inbounds": [
-    { "type": "tun", "tag": "tun-in", "inet4_address": "172.19.0.1/30" , "inet4_route_address": ["0.0.0.0/1", "128.0.0.0/1" ], "inet4_route_exclude_address": ["192.168.0.0/16" ], "mtu": 9000, "auto_route": true, "strict_route": false, "stack": "system", "sniff": true, "sniff_override_destination": false, "endpoint_independent_nat": false, "platform": { "http_proxy": { "enabled": true, "server": "127.0.0.1", "server_port": 2080 } } },
-    { "type": "mixed", "tag": "mixed", "listen": "127.0.0.1", "listen_port": 2080, "sniff": true, "users": [] }
+    { "type": "tun", "tag": "tun-in", "inet4_address": "172.19.0.1/30" , "inet4_route_address": ["0.0.0.0/1", "128.0.0.0/1" ], "inet4_route_exclude_address": ["192.168.0.0/16" ], "mtu": 9000, "auto_route": true, "strict_route": false, "sniff": true, "sniff_override_destination": false, "endpoint_independent_nat": false, "stack": "system", "platform": { "http_proxy": { "enabled": true, "server": "127.0.0.1", "server_port": 2080 } } }
+    // { "type": "mixed", "tag": "mixed", "listen": "127.0.0.1", "listen_port": 2080, "sniff": true, "users": [] }
   ],
   "outbounds": [
     { "tag": "🔰 节点选择", "type": "selector", "outbounds": [ "♻️ 自动选择", "🇭🇰 香港自动", "🇨🇳 台湾自动", "🇯🇵 日本自动", "🇮🇳 印度自动", "🇸🇬 狮城自动", "🇺🇸 美国自动", "懒人节点", "其他节点", "🌀 手动切换", "🎯 全球直连", "🐷 自建节点" ] },
@@ -69,14 +69,14 @@
     { "tag": "🇸🇬 狮城自动", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "use_all_providers": true, "includes": [ "🇸🇬|新加坡|SG|SINGAPORE|Singapore" ] },
     { "tag": "🇺🇸 美国自动", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "use_all_providers": true, "includes": [ "🇺🇸|美国|US|UNITED STATES|United States" ] },
     { "tag": "懒人节点", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "use_all_providers": true, "includes": [ "懒人" ] },
-    { "tag": "其他节点", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "providers": "🛫 wmsxwd" , "includes": [ "^[^(港|日|美|印|新|台|懒|ABC)]*$" ] },
+    { "tag": "其他节点", "type": "urltest", "url": "http://www.google-analytics.com/generate_204", "tolerance": 50, "providers": "🛫 wmsxwd", "includes": [ "^[^(港|日|美|印|新|台|懒|ABC)]*$" ] },
     { "tag": "🐷 自建节点", "type": "urltest", "url": "http://www.gstatic.com/generate_204", "tolerance": 50, "providers": "🛫 zglproviders" }
   ],
   "outbound_providers": [
     {
       "tag": "🛫 wmsxwd",
       "type": "remote",
-      "download_url": "https://wm01dy.wmyun.men/api/v1/client/subscribe?token=xxxxx",
+      "download_url": "https://wm01dy.wmyun.men/api/v1/client/subscribe?token=xxx",
       "path": "./wmsxwd.yaml",
       "download_interval": "24h",
       "download_ua": "clash.meta",
@@ -100,7 +100,7 @@
     "rules": [
       { "protocol": [ "dns" ], "outbound": "dns-out" },
       { "domain_suffix": [ "linux.do", "ajay.app", "returnyoutubedislikeapi.com" ], "outbound": "🪜 代理域名" },
-      { "domain_suffix": [ "oaifree.com", "guangbomi.com", "bootcss.com" ], "outbound": "🇨🇳 直连域名" },
+      { "domain_suffix": [ "oaifree.com", "guangbomi.com", "bootcss.com","clash.razord.top", "yacd.metacubex.one", "yacd.haishan.me", "d.metacubex.one" ], "outbound": "🇨🇳 直连域名" },
       { "protocol": [ "quic" ], "outbound": "REJECT" },
       { "clash_mode": "Direct", "outbound": "DIRECT" },
       { "clash_mode": "Global", "outbound": "GLOBAL" },
